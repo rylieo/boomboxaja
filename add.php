@@ -170,7 +170,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
             <h2 class="mb-4">Tambah Link Lagu</h2>
             <form method="POST">
                 <div class="mb-3">
-                    <input type="text" name="name" id="name" class="form-control" maxlength="100" required autocomplete="off" placeholder="Nama Lagu">
+                    <input type="text" name="name" id="name" class="form-control" maxlength="30" required autocomplete="off" placeholder="Nama Lagu" oninput="sanitizeInput(this)">
                 </div>
                 <div class="mb-3">
                     <input type="url" name="url" id="url" class="form-control" required placeholder="Link URL">
@@ -211,6 +211,16 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
                 showPopupAlert("❌ Link harus berakhir dengan <strong>.mp3</strong>!");
             };
         <?php endif; ?>
+
+        function sanitizeInput(input) {
+            // Hanya huruf dan spasi
+            let sanitized = input.value.replace(/[^a-zA-Z\s]/g, '');
+            // Maksimal 30 karakter
+            if (sanitized.length > 30) {
+                sanitized = sanitized.substring(0, 30);
+            }
+            input.value = sanitized;
+        }
     </script>
 </body>
 
