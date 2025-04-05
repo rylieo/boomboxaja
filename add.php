@@ -54,7 +54,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
         .navbar-brand {
             font-weight: 600;
             font-size: 1.5rem;
-            color: #fff !important;
+            color: #000 !important;
         }
 
         h2 {
