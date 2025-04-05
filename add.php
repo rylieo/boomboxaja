@@ -20,103 +20,189 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: index.php?success=1');
     exit;
 }
+
 $showError = isset($_GET['error']) && $_GET['error'] == 1;
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
-    <title>Add Link | Boomboxin</title>
+    <title>Tambah Lagu | Boomboxin</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body,
         html {
             height: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #fff;
         }
 
-        .wrapper {
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
+        ::placeholder {
+            color: #ccc !important;
+            opacity: 1;
         }
 
-        .content {
-            flex: 1;
+        .navbar {
+            background-color: #1db954 !important;
         }
 
-        .sticky-header {
-            position: sticky;
-            top: 0;
-            z-index: 1030;
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: #fff !important;
+        }
+
+        h2 {
+            font-weight: 600;
+        }
+
+        .btn-success {
+            background-color: #1db954;
+            border-color: #1db954;
+            font-weight: 600;
+        }
+
+        .btn-success:hover {
+            background-color: #17a74a;
+            border-color: #17a74a;
+        }
+
+        .btn-secondary {
+            font-weight: 600;
+        }
+
+        .form-control {
+            background-color: #222;
+            border: none;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .form-control:focus {
+            background-color: #2a2a2a;
+            color: #fff;
+            border: 1px solid #1db954;
         }
 
         footer {
-            background: #0d6efd;
-            color: white;
+            background-color: #000;
+            color: #aaa;
+            font-weight: 400;
+        }
+
+        .popup-alert-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1055;
+        }
+
+        .popup-alert {
+            background-color: #e74c3c;
+            color: #fff;
+            padding: 1rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+            max-width: 320px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInUp 0.3s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOutDown 0.4s ease forwards;
+        }
+
+        @keyframes fadeOutDown {
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
         }
     </style>
 </head>
 
-<body class="bg-light">
-    <div class="wrapper">
-
-        <!-- Header -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-header">
+<body>
+    <div class="wrapper d-flex flex-column min-vh-100">
+        <nav class="navbar navbar-expand-lg sticky-top">
             <div class="container justify-content-center">
-                <span class="navbar-brand mx-auto text-center w-100">BOOMBOXIN</span>
+                <span class="navbar-brand mx-auto">BOOMBOXIN</span>
             </div>
         </nav>
 
-        <!-- Error Alert -->
-        <?php if ($showError): ?>
-            <div id="errorAlert" class="alert alert-danger text-center m-0 rounded-0" role="alert">
-                ❌ Link harus berakhir dengan <strong>.mp3</strong>!
-            </div>
-        <?php endif; ?>
+        <div id="popupAlertOverlay" class="popup-alert-overlay" style="display: <?= $showError ? 'flex' : 'none' ?>;">
+            <div id="popupAlert" class="popup-alert">❌ Link harus berakhir dengan <strong>.mp3</strong>!</div>
+        </div>
 
-        <!-- Content -->
-        <div class="container content pt-5 pb-4">
-            <h2 class="mb-4">Form Tambah Link</h2>
-
+        <div class="container content pt-5 pb-4 flex-grow-1">
+            <h2 class="mb-4">Tambah Link Lagu</h2>
             <form method="POST">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nama</label>
                     <input type="text" name="name" id="name" class="form-control" maxlength="50"
-                        pattern="[A-Za-z ]{1,50}" required autocomplete="off">
+                        pattern="[A-Za-z ]{1,50}" required autocomplete="off" placeholder="Nama Lagu">
                 </div>
                 <div class="mb-3">
-                    <label for="url" class="form-label">Link URL</label>
-                    <input type="url" name="url" id="url" class="form-control" required>
+                    <input type="url" name="url" id="url" class="form-control" required placeholder="Link URL">
                 </div>
                 <button type="submit" class="btn btn-success">Simpan</button>
-                <a href="index.php" class="btn btn-secondary">Kembali</a>
+                <a href="index.php" class="btn btn-secondary ms-2">Kembali</a>
             </form>
         </div>
 
-        <!-- Footer -->
         <footer class="text-center py-3 mt-auto">
             &copy; BOOMBOXIN | Joe Ramon
         </footer>
     </div>
 
-    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Hanya izinkan huruf dan spasi di nama (maksimal 50 karakter)
         document.getElementById('name').addEventListener('input', function() {
             this.value = this.value.replace(/[^A-Za-z ]/g, '').slice(0, 50);
         });
 
-        // Sembunyikan alert error setelah 2 detik
-        const errorAlert = document.getElementById('errorAlert');
-        if (errorAlert) {
+        function showPopupAlert(message) {
+            const overlay = document.getElementById('popupAlertOverlay');
+            const alertBox = document.getElementById('popupAlert');
+
+            alertBox.innerHTML = message;
+            overlay.style.display = 'flex';
+            alertBox.classList.remove('fadeOut');
+            alertBox.style.animation = 'fadeInUp 0.3s ease forwards';
+
             setTimeout(() => {
-                errorAlert.style.display = 'none';
+                alertBox.classList.add('fadeOut');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 400);
             }, 2000);
         }
-    </script>
 
+        <?php if ($showError): ?>
+            window.onload = () => {
+                showPopupAlert("❌ Link harus berakhir dengan <strong>.mp3</strong>!");
+            };
+        <?php endif; ?>
+    </script>
 </body>
 
 </html>
