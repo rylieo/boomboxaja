@@ -5,66 +5,66 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 <!DOCTYPE html>
 <html lang="id">
 
-<head>
-    <meta charset="UTF-8">
-    <title>Home | Boomboxin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body,
-        html {
-            height: 100%;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home | Boomboxin</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    body,
+    html {
+        height: 100%;
+    }
 
-        .wrapper {
-            min-height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+    .wrapper {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
-        .content {
-            flex: 1;
-        }
+    .content {
+        flex: 1;
+    }
 
-        .sticky-header {
-            position: sticky;
-            top: 0;
-            z-index: 1030;
-        }
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+    }
 
-        footer {
-            background: #0d6efd;
-            color: white;
-        }
+    footer {
+        background: #0d6efd;
+        color: white;
+    }
 
+    .link-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .audio-player {
+        margin-top: 0.5rem;
+        width: 100%;
+    }
+
+    @media (max-width: 576px) {
         .link-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 1rem;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: flex-start;
         }
+    }
 
-        .audio-player {
-            margin-top: 0.5rem;
-            width: 100%;
-        }
+    #copyAlert {
+        display: none;
+    }
 
-        @media (max-width: 576px) {
-            .link-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        #copyAlert {
-            display: none;
-        }
-
-        .copy-input {
-            position: absolute;
-            left: -9999px;
-        }
-    </style>
+    .copy-input {
+        position: absolute;
+        left: -9999px;
+    }
+</style>
 </head>
 
 <body class="bg-light">
