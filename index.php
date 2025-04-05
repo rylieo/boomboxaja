@@ -5,66 +5,67 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 <!DOCTYPE html>
 <html lang="id">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Home | Boomboxin</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-    body,
-    html {
-        height: 100%;
-    }
-
-    .wrapper {
-        min-height: 100%;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .content {
-        flex: 1;
-    }
-
-    .sticky-header {
-        position: sticky;
-        top: 0;
-        z-index: 1030;
-    }
-
-    footer {
-        background: #0d6efd;
-        color: white;
-    }
-
-    .link-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .audio-player {
-        margin-top: 0.5rem;
-        width: 100%;
-    }
-
-    @media (max-width: 576px) {
-        .link-row {
-            flex-direction: column;
-            align-items: flex-start;
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home | Boomboxin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body,
+        html {
+            height: 100%;
         }
-    }
 
-    #copyAlert {
-        display: none;
-    }
+        .wrapper {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .copy-input {
-        position: absolute;
-        left: -9999px;
-    }
-</style>
+        .content {
+            flex: 1;
+        }
+
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+        }
+
+        footer {
+            background: #0d6efd;
+            color: white;
+        }
+
+        .link-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .audio-player {
+            margin-top: 0.5rem;
+            width: 100%;
+        }
+
+        @media (max-width: 576px) {
+            .link-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+
+        #copyAlert {
+            display: none;
+        }
+
+        .copy-input {
+            position: absolute;
+            left: -9999px;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -102,8 +103,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                                     <source src="<?= htmlspecialchars($link['url']) ?>" type="audio/mpeg">
                                     Browser Anda tidak mendukung audio tag.
                                 </audio>
-                                <!-- Hidden input to copy -->
-                                <input type="text" class="copy-input" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>">
+                                <input type="text" class="copy-input" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>" readonly>
                             </div>
                             <div>
                                 <button class="btn btn-outline-secondary btn-sm copy-btn" data-input="copyInput<?= $index ?>">Copy</button>
@@ -121,17 +121,31 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const alertBox = document.getElementById('copyAlert');
+        function showCopyAlert() {
+            const alertBox = document.getElementById('copyAlert');
+            alertBox.style.display = 'block';
+            setTimeout(() => alertBox.style.display = 'none', 2000);
+        }
+
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const inputId = btn.getAttribute('data-input');
                 const input = document.getElementById(inputId);
-                input.select();
-                input.setSelectionRange(0, 99999); // For mobile
-                document.execCommand('copy');
+                const textToCopy = input.value;
 
-                alertBox.style.display = 'block';
-                setTimeout(() => alertBox.style.display = 'none', 2000);
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        showCopyAlert();
+                    }).catch(err => {
+                        console.error('Gagal menyalin: ', err);
+                    });
+                } else {
+                    // Fallback (browser lama)
+                    input.select();
+                    input.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    showCopyAlert();
+                }
             });
         });
 
