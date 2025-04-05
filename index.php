@@ -243,7 +243,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 
         <!-- Pemutar Lagu -->
         <div id="playerContainer" class="d-flex px-4 py-3">
-            <div id="nowPlaying" class="me-3">🎶 Memutar: -</div>
+            <div id="nowPlaying" class="me-3">Memutar: -</div>
             <audio id="audioPlayer" controls></audio>
         </div>
 
@@ -309,7 +309,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 
                 audio.src = url;
                 container.style.display = 'flex';
-                nowPlaying.textContent = '🎶 Memutar: ' + item.querySelector('.link-name').textContent.trim();
+                nowPlaying.textContent = 'Memutar: ' + item.querySelector('.link-name').textContent.trim();
 
                 try {
                     await audio.play();
