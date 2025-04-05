@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $url = 'http://' . substr($url, 8);
     }
 
-    // Cek apakah URL berakhir dengan .mp3
+    // Validasi .mp3
     if (strtolower(substr($url, -4)) !== '.mp3') {
         header('Location: add.php?error=1');
         exit;
@@ -139,6 +139,17 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
                 transform: translateY(20px);
             }
         }
+
+        @media (max-width: 576px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .btn+.btn {
+                margin-left: 0 !important;
+            }
+        }
     </style>
 </head>
 
@@ -150,22 +161,24 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
             </div>
         </nav>
 
+        <!-- Alert Error -->
         <div id="popupAlertOverlay" class="popup-alert-overlay" style="display: <?= $showError ? 'flex' : 'none' ?>;">
             <div id="popupAlert" class="popup-alert">❌ Link harus berakhir dengan <strong>.mp3</strong>!</div>
         </div>
 
-        <div class="container content pt-5 pb-4 flex-grow-1">
+        <div class="container content pt-5 pb-4 flex-grow-1 px-3">
             <h2 class="mb-4">Tambah Link Lagu</h2>
             <form method="POST">
                 <div class="mb-3">
-                    <input type="text" name="name" id="name" class="form-control" maxlength="50"
-                        pattern="[A-Za-z ]{1,50}" required autocomplete="off" placeholder="Nama Lagu">
+                    <input type="text" name="name" id="name" class="form-control" maxlength="100" required autocomplete="off" placeholder="Nama Lagu">
                 </div>
                 <div class="mb-3">
                     <input type="url" name="url" id="url" class="form-control" required placeholder="Link URL">
                 </div>
-                <button type="submit" class="btn btn-success">Simpan</button>
-                <a href="index.php" class="btn btn-secondary ms-2">Kembali</a>
+                <div class="d-flex flex-wrap gap-2">
+                    <button type="submit" class="btn btn-success">Simpan</button>
+                    <a href="index.php" class="btn btn-secondary">Kembali</a>
+                </div>
             </form>
         </div>
 
@@ -176,10 +189,6 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.getElementById('name').addEventListener('input', function() {
-            this.value = this.value.replace(/[^A-Za-z ]/g, '').slice(0, 50);
-        });
-
         function showPopupAlert(message) {
             const overlay = document.getElementById('popupAlertOverlay');
             const alertBox = document.getElementById('popupAlert');

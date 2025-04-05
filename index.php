@@ -91,7 +91,6 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             border: 1px solid #1db954;
         }
 
-        /* Tambahan: agar placeholder terlihat */
         .form-control::placeholder {
             color: #aaa;
             opacity: 1;
@@ -127,9 +126,29 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             audio {
                 width: 100%;
             }
+
+            .link-row {
+                flex-direction: column;
+                align-items: flex-start !important;
+                gap: 0.5rem;
+            }
+
+            .copy-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            #playerContainer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            #nowPlaying {
+                text-align: left;
+            }
         }
 
-        /* Popup Alert */
         .popup-alert-overlay {
             position: fixed;
             top: 0;
@@ -190,13 +209,20 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             <div id="popupAlert" class="popup-alert">Popup Message</div>
         </div>
 
-        <div class="container content pt-5 pb-4 flex-grow-1">
+        <div class="container content pt-5 pb-4 flex-grow-1 px-3">
             <h2 class="mb-4">Daftar Music</h2>
-            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
-                <input type="text" id="searchInput" class="form-control w-50" placeholder="Cari...">
-                <a href="add.php" class="btn btn-primary">+ Tambah Lagu</a>
+
+            <!-- Form pencarian dan tombol tambah lagu -->
+            <div class="row g-2 mb-4">
+                <div class="col-12 col-md-8">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
+                </div>
+                <div class="col-12 col-md-4 text-md-end">
+                    <a href="add.php" class="btn btn-primary w-100 w-md-auto">+ Tambah Lagu</a>
+                </div>
             </div>
 
+            <!-- Daftar lagu -->
             <div class="list-group" id="linkList">
                 <?php $i = 1; ?>
                 <?php foreach ($links as $index => $link): ?>
@@ -215,7 +241,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             </div>
         </div>
 
-        <!-- Pemutar Lagu - sekarang di atas footer -->
+        <!-- Pemutar Lagu -->
         <div id="playerContainer" class="d-flex px-4 py-3">
             <div id="nowPlaying" class="me-3">🎶 Memutar: -</div>
             <audio id="audioPlayer" controls></audio>
