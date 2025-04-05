@@ -81,7 +81,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
 
             <form method="POST">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nama (maksimal 50 karakter)</label>
+                    <label for="name" class="form-label">Nama</label>
                     <input type="text" name="name" id="name" class="form-control" maxlength="50"
                         pattern="[A-Za-z ]{1,50}" required autocomplete="off">
                 </div>
