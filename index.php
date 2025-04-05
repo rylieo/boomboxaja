@@ -8,7 +8,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Home | Boomboxin</title>
+    <title>Boomboxin | Daftar Music</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -103,26 +103,37 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             font-weight: 600;
         }
 
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1030;
+        }
+
         #playerContainer {
+            position: fixed;
+            bottom: 56px;
+            left: 0;
+            width: 100%;
+            z-index: 1040;
             display: none;
             background-color: #181818;
             padding: 10px 20px;
             border-top: 1px solid #282828;
             align-items: center;
             justify-content: space-between;
-            margin-top: 20px;
         }
 
-        #nowPlaying {
-            color: #fff;
-            font-weight: 600;
-        }
-
-        audio {
-            width: 300px;
+        body {
+            padding-bottom: 112px;
         }
 
         @media (max-width: 576px) {
+            body {
+                padding-bottom: 140px;
+            }
+
             audio {
                 width: 100%;
             }
@@ -193,6 +204,14 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                 transform: translateY(20px);
             }
         }
+
+        /* Tambahan untuk menghindari tertutup elemen sticky */
+        .list-group::after {
+            content: '';
+            display: block;
+            height: 160px;
+            /* Disesuaikan agar item terakhir tidak tertutup */
+        }
     </style>
 </head>
 
@@ -212,17 +231,15 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
         <div class="container content pt-5 pb-4 flex-grow-1 px-3">
             <h2 class="mb-4">Daftar Music</h2>
 
-            <!-- Form pencarian dan tombol tambah lagu -->
             <div class="row g-2 mb-4">
                 <div class="col-12 col-md-8">
                     <input type="text" id="searchInput" class="form-control" placeholder="Cari...">
                 </div>
                 <div class="col-12 col-md-4 text-md-end">
-                    <a href="add.php" class="btn btn-primary w-100 w-md-auto">+ Tambah Lagu</a>
+                    <a href="add.php" class="btn btn-primary w-100 w-md-auto">Tambah Music</a>
                 </div>
             </div>
 
-            <!-- Daftar lagu -->
             <div class="list-group" id="linkList">
                 <?php $i = 1; ?>
                 <?php foreach ($links as $index => $link): ?>
@@ -230,10 +247,10 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                         <div class="link-row d-flex justify-content-between flex-wrap align-items-center">
                             <div class="flex-grow-1">
                                 <strong class="link-name"><?= $i++ ?>. <?= strtolower(htmlspecialchars($link['name'])) ?></strong>
-                                <input type="text" class="copy-input visually-hidden" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>" readonly style="position: absolute; left: -9999px;">
+                                <input type="text" class="copy-input visually-hidden" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>" readonly>
                             </div>
                             <div class="mt-2">
-                                <button class="btn btn-outline-light btn-sm copy-btn" data-input="copyInput<?= $index ?>">Copy</button>
+                                <button class="btn btn-outline-light btn-sm copy-btn" data-input="copyInput<?= $index ?>">Copy Link</button>
                             </div>
                         </div>
                     </div>
@@ -241,13 +258,12 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             </div>
         </div>
 
-        <!-- Pemutar Lagu -->
         <div id="playerContainer" class="d-flex px-4 py-3">
             <div id="nowPlaying" class="me-3">Memutar: -</div>
             <audio id="audioPlayer" controls></audio>
         </div>
 
-        <footer class="text-center py-3">
+        <footer class="text-center py-3 sticky-footer">
             &copy; BOOMBOXIN | Joe Ramon
         </footer>
     </div>
@@ -257,12 +273,10 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
         function showPopupAlert(message) {
             const overlay = document.getElementById('popupAlertOverlay');
             const alertBox = document.getElementById('popupAlert');
-
             alertBox.textContent = message;
             overlay.style.display = 'flex';
             alertBox.classList.remove('fadeOut');
             alertBox.style.animation = 'fadeInUp 0.3s ease forwards';
-
             setTimeout(() => {
                 alertBox.classList.add('fadeOut');
                 setTimeout(() => {
@@ -277,24 +291,16 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                 const inputId = btn.getAttribute('data-input');
                 const input = document.getElementById(inputId);
                 const textToCopy = input.value;
-
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         showPopupAlert("✅ Link berhasil disalin!");
                     }).catch(err => {
-                        console.error("Clipboard error:", err);
-                        // Fallback jika navigator.clipboard gagal
                         input.focus();
                         input.select();
                         try {
-                            const successful = document.execCommand('copy');
-                            if (successful) {
-                                showPopupAlert("✅ Link berhasil disalin!");
-                            } else {
-                                showPopupAlert("🚫 Gagal menyalin link.");
-                            }
-                        } catch (err) {
-                            console.error("Fallback copy failed:", err);
+                            document.execCommand('copy');
+                            showPopupAlert("✅ Link berhasil disalin!");
+                        } catch {
                             showPopupAlert("🚫 Gagal menyalin link.");
                         }
                     });
@@ -302,26 +308,18 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                     input.focus();
                     input.select();
                     try {
-                        const successful = document.execCommand('copy');
-                        if (successful) {
-                            showPopupAlert("✅ Link berhasil disalin!");
-                        } else {
-                            showPopupAlert("🚫 Gagal menyalin link.");
-                        }
-                    } catch (err) {
-                        console.error("Fallback copy failed:", err);
+                        document.execCommand('copy');
+                        showPopupAlert("✅ Link berhasil disalin!");
+                    } catch {
                         showPopupAlert("🚫 Gagal menyalin link.");
                     }
                 }
-
             });
         });
 
         document.getElementById('searchInput').addEventListener('input', function() {
             const keyword = this.value.toLowerCase();
-            const items = document.querySelectorAll('.link-item');
-
-            items.forEach(item => {
+            document.querySelectorAll('.link-item').forEach(item => {
                 const name = item.querySelector('.link-name').textContent.toLowerCase();
                 item.style.display = name.includes(keyword) ? 'block' : 'none';
             });
@@ -333,15 +331,12 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                 const audio = document.getElementById('audioPlayer');
                 const container = document.getElementById('playerContainer');
                 const nowPlaying = document.getElementById('nowPlaying');
-
                 audio.src = url;
                 container.style.display = 'flex';
                 nowPlaying.textContent = 'Memutar: ' + item.querySelector('.link-name').textContent.trim();
-
                 try {
                     await audio.play();
                 } catch (error) {
-                    console.error('Gagal memutar lagu:', error);
                     showPopupAlert("🚫 Gagal memutar lagu.");
                 }
             });

@@ -28,7 +28,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
 <html lang="id">
 
 <head>
-    <title>Tambah Lagu | Boomboxin</title>
+    <title>Boomboxin | Tambah Music</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -40,6 +40,8 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
             font-family: 'Inter', sans-serif;
             background-color: #121212;
             color: #fff;
+            padding-bottom: 56px;
+            /* Space for sticky footer */
         }
 
         ::placeholder {
@@ -92,7 +94,15 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
         footer {
             background-color: #000;
             color: #aaa;
-            font-weight: 400;
+            font-weight: 600;
+        }
+
+        .sticky-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1030;
         }
 
         .popup-alert-overlay {
@@ -167,13 +177,13 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
         </div>
 
         <div class="container content pt-5 pb-4 flex-grow-1 px-3">
-            <h2 class="mb-4">Tambah Link Lagu</h2>
+            <h2 class="mb-4">Tambah Music</h2>
             <form method="POST">
                 <div class="mb-3">
-                    <input type="text" name="name" id="name" class="form-control" maxlength="30" required autocomplete="off" placeholder="Nama Lagu" oninput="sanitizeInput(this)">
+                    <input type="text" name="name" id="name" class="form-control" maxlength="30" required autocomplete="off" placeholder="Nama" oninput="sanitizeInput(this)">
                 </div>
                 <div class="mb-3">
-                    <input type="url" name="url" id="url" class="form-control" required placeholder="Link URL">
+                    <input type="url" name="url" id="url" class="form-control" required placeholder="URL">
                 </div>
                 <div class="d-flex flex-wrap gap-2">
                     <button type="submit" class="btn btn-success">Simpan</button>
@@ -182,7 +192,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
             </form>
         </div>
 
-        <footer class="text-center py-3 mt-auto">
+        <footer class="text-center py-3 sticky-footer">
             &copy; BOOMBOXIN | Joe Ramon
         </footer>
     </div>
