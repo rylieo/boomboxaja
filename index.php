@@ -99,7 +99,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                         <div class="link-row">
                             <div class="flex-grow-1">
                                 <strong class="link-name"><?= $i++ ?>. <?= strtolower(htmlspecialchars($link['name'])) ?></strong>
-                                <audio class="audio-player mt-2" controls>
+                                <audio class="audio-player mt-2" controls preload="none">
                                     <source src="<?= htmlspecialchars($link['url']) ?>" type="audio/mpeg">
                                     Browser Anda tidak mendukung audio tag.
                                 </audio>
