@@ -54,29 +54,27 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                 flex-direction: column;
                 align-items: flex-start;
             }
-
-            .audio-player {
-                width: 100%;
-            }
         }
 
         #copyAlert {
             display: none;
+        }
+
+        .copy-input {
+            position: absolute;
+            left: -9999px;
         }
     </style>
 </head>
 
 <body class="bg-light">
     <div class="wrapper">
-
-        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-header">
             <div class="container justify-content-center">
                 <span class="navbar-brand mx-auto w-100 text-center">BOOMBOXIN</span>
             </div>
         </nav>
 
-        <!-- Alerts -->
         <?php if ($showSuccessAlert): ?>
             <div id="successAlert" class="alert alert-success text-center m-0 rounded-0" role="alert">
                 ✅ Link berhasil ditambahkan!
@@ -86,11 +84,8 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             ✅ Link berhasil disalin!
         </div>
 
-        <!-- Content -->
         <div class="container content pt-5 pb-4">
             <h2 class="mb-4">Daftar Link</h2>
-
-            <!-- Baris tombol tambah dan pencarian -->
             <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
                 <input type="text" id="searchInput" class="form-control w-50" placeholder="Cari berdasarkan nama...">
                 <a href="add.php" class="btn btn-primary">Tambah Link</a>
@@ -107,9 +102,11 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                                     <source src="<?= htmlspecialchars($link['url']) ?>" type="audio/mpeg">
                                     Browser Anda tidak mendukung audio tag.
                                 </audio>
+                                <!-- Hidden input to copy -->
+                                <input type="text" class="copy-input" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>">
                             </div>
                             <div>
-                                <button class="btn btn-outline-secondary btn-sm copy-btn" data-url="<?= htmlspecialchars($link['url']) ?>">Copy</button>
+                                <button class="btn btn-outline-secondary btn-sm copy-btn" data-input="copyInput<?= $index ?>">Copy</button>
                             </div>
                         </div>
                     </div>
@@ -117,34 +114,32 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             </div>
         </div>
 
-        <!-- Footer -->
         <footer class="text-center py-3 mt-auto">
             &copy; BOOMBOXIN | Joe Ramon
         </footer>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Copy button
         const alertBox = document.getElementById('copyAlert');
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                const url = btn.getAttribute('data-url');
-                navigator.clipboard.writeText(url).then(() => {
-                    alertBox.style.display = 'block';
-                    setTimeout(() => alertBox.style.display = 'none', 2000);
-                });
+                const inputId = btn.getAttribute('data-input');
+                const input = document.getElementById(inputId);
+                input.select();
+                input.setSelectionRange(0, 99999); // For mobile
+                document.execCommand('copy');
+
+                alertBox.style.display = 'block';
+                setTimeout(() => alertBox.style.display = 'none', 2000);
             });
         });
 
-        // Success alert
         const successAlert = document.getElementById('successAlert');
         if (successAlert) {
             setTimeout(() => successAlert.style.display = 'none', 2000);
         }
 
-        // Filter/pencarian
         document.getElementById('searchInput').addEventListener('input', function() {
             const keyword = this.value.toLowerCase();
             const items = document.querySelectorAll('.link-item');
