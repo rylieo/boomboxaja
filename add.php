@@ -81,9 +81,9 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
 
             <form method="POST">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nama</label>
-                    <input type="text" name="name" id="name" class="form-control" maxlength="30"
-                        pattern="[A-Za-z ]{1,30}" required autocomplete="off">
+                    <label for="name" class="form-label">Nama (maksimal 50 karakter)</label>
+                    <input type="text" name="name" id="name" class="form-control" maxlength="50"
+                        pattern="[A-Za-z ]{1,50}" required autocomplete="off">
                 </div>
                 <div class="mb-3">
                     <label for="url" class="form-label">Link URL</label>
@@ -102,9 +102,9 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
 
     <!-- JavaScript -->
     <script>
-        // Hanya izinkan huruf dan spasi di nama
+        // Hanya izinkan huruf dan spasi di nama (maksimal 50 karakter)
         document.getElementById('name').addEventListener('input', function() {
-            this.value = this.value.replace(/[^A-Za-z ]/g, '');
+            this.value = this.value.replace(/[^A-Za-z ]/g, '').slice(0, 50);
         });
 
         // Sembunyikan alert error setelah 2 detik
@@ -115,6 +115,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
             }, 2000);
         }
     </script>
+
 </body>
 
 </html>
