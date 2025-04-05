@@ -64,7 +64,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
         <!-- Header -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-header">
             <div class="container justify-content-center">
-                <span class="navbar-brand mx-auto text-center w-100">Boombox Link Manager</span>
+                <span class="navbar-brand mx-auto text-center w-100">BOOMBOXIN</span>
             </div>
         </nav>
 
@@ -96,7 +96,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
 
         <!-- Footer -->
         <footer class="text-center py-3 mt-auto">
-            &copy; Boombox Link Manager | Joe Ramon
+            &copy; BOOMBOXIN | Joe Ramon
         </footer>
     </div>
 

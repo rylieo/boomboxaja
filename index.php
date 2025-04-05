@@ -3,11 +3,11 @@ $links = file_exists('links.json') ? json_decode(file_get_contents('links.json')
 $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="id">
 
 <head>
-    <title>Daftar Link</title>
     <meta charset="UTF-8">
+    <title>Boombox Link Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body,
@@ -41,12 +41,22 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             justify-content: space-between;
             align-items: center;
             gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .audio-player {
+            margin-top: 0.5rem;
+            width: 100%;
         }
 
         @media (max-width: 576px) {
             .link-row {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+
+            .audio-player {
+                width: 100%;
             }
         }
 
@@ -59,14 +69,14 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 <body class="bg-light">
     <div class="wrapper">
 
-        <!-- Header -->
+        <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary sticky-header">
             <div class="container justify-content-center">
-                <span class="navbar-brand mx-auto text-center w-100">Boombox Link Manager</span>
+                <span class="navbar-brand mx-auto w-100 text-center">BOOMBOXIN</span>
             </div>
         </nav>
 
-        <!-- Alert -->
+        <!-- Alerts -->
         <?php if ($showSuccessAlert): ?>
             <div id="successAlert" class="alert alert-success text-center m-0 rounded-0" role="alert">
                 ✅ Link berhasil ditambahkan!
@@ -79,16 +89,27 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
         <!-- Content -->
         <div class="container content pt-5 pb-4">
             <h2 class="mb-4">Daftar Link</h2>
-            <a href="add.php" class="btn btn-primary mb-4">Tambah Link</a>
-            <div class="list-group">
+
+            <!-- Baris tombol tambah dan pencarian -->
+            <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-2">
+                <input type="text" id="searchInput" class="form-control w-50" placeholder="Cari berdasarkan nama...">
+                <a href="add.php" class="btn btn-primary">Tambah Link</a>
+            </div>
+
+            <div class="list-group" id="linkList">
+                <?php $i = 1; ?>
                 <?php foreach ($links as $index => $link): ?>
-                    <div class="list-group-item">
+                    <div class="list-group-item link-item">
                         <div class="link-row">
-                            <div><strong><?= ($index + 1) ?>. <?= strtolower(htmlspecialchars($link['name'])) ?></strong></div>
+                            <div class="flex-grow-1">
+                                <strong class="link-name"><?= $i++ ?>. <?= strtolower(htmlspecialchars($link['name'])) ?></strong>
+                                <audio class="audio-player mt-2" controls>
+                                    <source src="<?= htmlspecialchars($link['url']) ?>" type="audio/mpeg">
+                                    Browser Anda tidak mendukung audio tag.
+                                </audio>
+                            </div>
                             <div>
-                                <button class="btn btn-outline-secondary btn-sm copy-btn" data-url="<?= htmlspecialchars($link['url']) ?>">
-                                    Copy Link
-                                </button>
+                                <button class="btn btn-outline-secondary btn-sm copy-btn" data-url="<?= htmlspecialchars($link['url']) ?>">Copy</button>
                             </div>
                         </div>
                     </div>
@@ -98,33 +119,41 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
 
         <!-- Footer -->
         <footer class="text-center py-3 mt-auto">
-            &copy; Boombox Link Manager | Joe Ramon
+            &copy; BOOMBOXIN | Joe Ramon
         </footer>
-
     </div>
 
-    <!-- Script -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Copy button
         const alertBox = document.getElementById('copyAlert');
         document.querySelectorAll('.copy-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const url = btn.getAttribute('data-url');
                 navigator.clipboard.writeText(url).then(() => {
                     alertBox.style.display = 'block';
-                    setTimeout(() => {
-                        alertBox.style.display = 'none';
-                    }, 2000);
+                    setTimeout(() => alertBox.style.display = 'none', 2000);
                 });
             });
         });
 
+        // Success alert
         const successAlert = document.getElementById('successAlert');
         if (successAlert) {
-            setTimeout(() => {
-                successAlert.style.display = 'none';
-            }, 2000);
+            setTimeout(() => successAlert.style.display = 'none', 2000);
         }
+
+        // Filter/pencarian
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const keyword = this.value.toLowerCase();
+            const items = document.querySelectorAll('.link-item');
+
+            items.forEach(item => {
+                const name = item.querySelector('.link-name').textContent.toLowerCase();
+                item.style.display = name.includes(keyword) ? 'block' : 'none';
+            });
+        });
     </script>
 </body>
 
