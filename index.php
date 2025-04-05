@@ -230,7 +230,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                         <div class="link-row d-flex justify-content-between flex-wrap align-items-center">
                             <div class="flex-grow-1">
                                 <strong class="link-name"><?= $i++ ?>. <?= strtolower(htmlspecialchars($link['name'])) ?></strong>
-                                <input type="text" class="copy-input" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>" readonly hidden>
+                                <input type="text" class="copy-input visually-hidden" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>" readonly style="position: absolute; left: -9999px;">
                             </div>
                             <div class="mt-2">
                                 <button class="btn btn-outline-light btn-sm copy-btn" data-input="copyInput<?= $index ?>">Copy</button>
@@ -281,12 +281,39 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                 if (navigator.clipboard) {
                     navigator.clipboard.writeText(textToCopy).then(() => {
                         showPopupAlert("✅ Link berhasil disalin!");
+                    }).catch(err => {
+                        console.error("Clipboard error:", err);
+                        // Fallback jika navigator.clipboard gagal
+                        input.focus();
+                        input.select();
+                        try {
+                            const successful = document.execCommand('copy');
+                            if (successful) {
+                                showPopupAlert("✅ Link berhasil disalin!");
+                            } else {
+                                showPopupAlert("🚫 Gagal menyalin link.");
+                            }
+                        } catch (err) {
+                            console.error("Fallback copy failed:", err);
+                            showPopupAlert("🚫 Gagal menyalin link.");
+                        }
                     });
                 } else {
+                    input.focus();
                     input.select();
-                    document.execCommand('copy');
-                    showPopupAlert("✅ Link berhasil disalin!");
+                    try {
+                        const successful = document.execCommand('copy');
+                        if (successful) {
+                            showPopupAlert("✅ Link berhasil disalin!");
+                        } else {
+                            showPopupAlert("🚫 Gagal menyalin link.");
+                        }
+                    } catch (err) {
+                        console.error("Fallback copy failed:", err);
+                        showPopupAlert("🚫 Gagal menyalin link.");
+                    }
                 }
+
             });
         });
 
