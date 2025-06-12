@@ -194,7 +194,7 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
         </div>
 
         <footer class="text-center py-3 sticky-footer">
-            &copy; BOOMBOXIN | Joe Ramon
+            &copy; BOOMBOXIN | RIO
         </footer>
     </div>
 
