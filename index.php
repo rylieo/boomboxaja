@@ -246,11 +246,14 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
                     <div class="list-group-item link-item p-3 play-song" data-url="<?= htmlspecialchars($link['url']) ?>">
                         <div class="link-row d-flex justify-content-between flex-wrap align-items-center">
                             <div class="flex-grow-1">
-                                <strong class="link-name"><?= $i++ ?>. <?= strtolower(htmlspecialchars($link['name'])) ?></strong>
-                                <input type="text" class="copy-input visually-hidden" id="copyInput<?= $index ?>" value="<?= htmlspecialchars($link['url']) ?>" readonly>
+                                <strong class="link-name"><?= $i++ ?>.
+                                    <?= strtolower(htmlspecialchars($link['name'])) ?></strong>
+                                <input type="text" class="copy-input visually-hidden" id="copyInput<?= $index ?>"
+                                    value="<?= htmlspecialchars($link['url']) ?>" readonly>
                             </div>
                             <div class="mt-2">
-                                <button class="btn btn-outline-light btn-sm copy-btn" data-input="copyInput<?= $index ?>">Copy Link</button>
+                                <button class="btn btn-outline-light btn-sm copy-btn"
+                                    data-input="copyInput<?= $index ?>">Copy Link</button>
                             </div>
                         </div>
                     </div>
@@ -317,7 +320,7 @@ $showSuccessAlert = isset($_GET['success']) && $_GET['success'] == 1;
             });
         });
 
-        document.getElementById('searchInput').addEventListener('input', function() {
+        document.getElementById('searchInput').addEventListener('input', function () {
             const keyword = this.value.toLowerCase();
             document.querySelectorAll('.link-item').forEach(item => {
                 const name = item.querySelector('.link-name').textContent.toLowerCase();

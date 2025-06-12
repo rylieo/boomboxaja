@@ -180,7 +180,8 @@ $showError = isset($_GET['error']) && $_GET['error'] == 1;
             <h2 class="mb-4">Tambah Music</h2>
             <form method="POST">
                 <div class="mb-3">
-                    <input type="text" name="name" id="name" class="form-control" maxlength="30" required autocomplete="off" placeholder="Nama" oninput="sanitizeInput(this)">
+                    <input type="text" name="name" id="name" class="form-control" maxlength="30" required
+                        autocomplete="off" placeholder="Nama" oninput="sanitizeInput(this)">
                 </div>
                 <div class="mb-3">
                     <input type="url" name="url" id="url" class="form-control" required placeholder="URL">
